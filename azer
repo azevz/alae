@@ -1,0 +1,27 @@
+import socket
+import requests
+import time
+
+def get_local_ip():
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        s.connect(("8.8.8.8", 80))
+        ip = s.getsockname()[0]
+    except Exception:
+        ip = "غير متوفر"
+    finally:
+        s.close()
+    return ip
+
+def get_public_ip():
+    try:
+        response = requests.get("https://api.ipify.org")
+        return response.text
+    except Exception:
+        return "غير متوفر"
+
+for i in range(100):
+    print(f"\n🔁 المحاولة رقم {i+1}")
+    print("📡 عنوان IP المحلي الحقيقي:", get_local_ip())
+    print("🌐 عنوان IP الخارجي:", get_public_ip())
+    time.sleep(0.1)  # تأخير 1 ثانية بين كل محاولة (اختياري)
